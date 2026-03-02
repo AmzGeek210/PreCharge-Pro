@@ -8,205 +8,202 @@
 body{
     margin:0;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-    background:#f2f2f2;
-    overflow-x:hidden;
+    background:linear-gradient(180deg,#0f172a,#1e293b);
+    color:white;
+    display:flex;
+    justify-content:center;
 }
 
-/* ===== SPLASH ===== */
-.splash{
-    position:fixed;
-    inset:0;
-    background:linear-gradient(135deg,#6d28d9,#a855f7);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:white;
+.app{
+    width:100%;
+    max-width:420px;
+    padding:20px;
+    min-height:100vh;
+}
+
+/* HEADER */
+.header{
+    margin-top:10px;
+    margin-bottom:25px;
+}
+.title{
     font-size:24px;
     font-weight:bold;
-    z-index:999;
-    animation:fadeOut 1.2s forwards;
-    animation-delay:1.2s;
 }
-@keyframes fadeOut{
-    to{opacity:0;visibility:hidden;}
-}
-
-/* ===== CONTAINER ===== */
-.container{
-    max-width:420px;
-    margin:auto;
-    min-height:100vh;
-    padding-bottom:90px;
+.subtitle{
+    font-size:14px;
+    color:#94a3b8;
+    margin-top:5px;
 }
 
-/* STATUS BAR */
-.status-bar{
-    display:flex;
-    justify-content:space-between;
-    padding:6px 14px;
+/* CARD */
+.card{
+    background:#1e293b;
+    padding:18px;
+    border-radius:18px;
+    margin-bottom:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* INPUTS */
+label{
     font-size:13px;
-    background:white;
+    color:#cbd5e1;
 }
-
-/* WALLET CARD */
-.wallet{
-    margin:15px;
-    padding:22px;
-    border-radius:22px;
+select,input{
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    margin-bottom:14px;
+    border-radius:12px;
+    border:none;
+    background:#0f172a;
     color:white;
-    background:linear-gradient(135deg,#6d28d9,#a855f7);
-    box-shadow:0 10px 25px rgba(109,40,217,0.3);
 }
-.wallet-id{opacity:0.9;}
-.wallet-balance{font-size:28px;font-weight:bold;margin-top:8px;}
 
-/* SECTION */
-.section{
-    padding:15px;
+/* SLIDER */
+.range-wrapper{
+    margin-bottom:14px;
 }
-.calc-btn{
-    margin-top:15px;
-    padding:16px;
-    border-radius:16px;
+.range-value{
+    font-size:14px;
+    margin-top:5px;
+    color:#38bdf8;
+}
+
+/* BUTTON */
+.button{
     background:#7c3aed;
-    color:white;
+    padding:14px;
+    border-radius:14px;
     text-align:center;
     font-weight:bold;
-    box-shadow:0 6px 15px rgba(124,58,237,0.4);
     cursor:pointer;
+    margin-top:10px;
 }
 
-/* BOTTOM NAV */
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:50%;
-    transform:translateX(-50%);
-    width:100%;
-    max-width:420px;
-    background:white;
-    display:flex;
-    justify-content:space-around;
-    padding:10px 0;
-    border-top:1px solid #ddd;
-}
-.nav-item{text-align:center;font-size:12px;color:#999;}
-.nav-item.active{color:#7c3aed;}
-.nav-icon{font-size:20px;}
-.scan-btn{
-    background:#7c3aed;
-    color:white;
-    width:55px;height:55px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-top:-25px;
-    font-size:22px;
-}
-
-/* ===== BOTTOM SHEET ===== */
-.sheet{
-    position:fixed;
-    bottom:-100%;
-    left:0;
-    width:100%;
-    max-width:420px;
-    background:white;
-    border-radius:20px 20px 0 0;
-    box-shadow:0 -5px 20px rgba(0,0,0,0.2);
-    transition:0.4s ease;
-    padding:20px;
-}
-.sheet.active{
-    bottom:0;
-}
-.sheet h3{margin-top:0;}
-.close-btn{
-    text-align:right;
+/* RESULT */
+.result{
+    margin-top:15px;
     font-size:14px;
-    color:#7c3aed;
-    cursor:pointer;
+    line-height:1.6;
+}
+.highlight{
+    margin-top:10px;
+    font-size:18px;
+    font-weight:bold;
+    color:#22d3ee;
 }
 </style>
 </head>
 
 <body>
 
-<div class="splash">PreCharge Pro</div>
+<div class="app">
 
-<div class="container">
-
-    <div class="status-bar">
-        <div>16:13</div>
-        <div>📶 4G 🔋72%</div>
-    </div>
-
-    <div class="wallet">
-        <div class="wallet-id">V5427031968</div>
-        <div>ยอดคงเหลือ</div>
-        <div class="wallet-balance">฿0</div>
-    </div>
-
-    <div class="section">
-        <h3>เติมเงินเข้า VOLTA</h3>
-        <div class="calc-btn" onclick="window.location.href='calc.html'">
-            🔮 คำนวณค่าใช้จ่ายก่อนเติมเงิน
+    <div class="header">
+        <div class="title">PreCharge Pro</div>
+        <div class="subtitle">
+            Estimate your charging cost before you plug in.
         </div>
     </div>
 
-</div>
+    <div class="card">
 
-<!-- Bottom Sheet -->
-<div class="sheet" id="sheet">
-    <div class="close-btn" onclick="closeSheet()">ปิด</div>
-    <h3>คำนวณค่าใช้จ่าย</h3>
-    <p>เลือกรถ / % / ระบบจะคำนวณให้...</p>
-    <div style="background:#f2f2f2;padding:12px;border-radius:12px;margin-top:10px;">
-        🔋 ตัวอย่างผลลัพธ์<br>
-        ค่าใช้จ่าย 400 บาท<br>
-        แนะนำ 300 + 100 บาท
-    </div>
-</div>
+        <label>Select Vehicle</label>
+        <select id="carSelect">
+            <option value="60">Tesla Model 3 Standard (60 kWh)</option>
+            <option value="82">Tesla Model 3 Long Range (82 kWh)</option>
+            <option value="60.48">BYD Atto 3 (60.48 kWh)</option>
+            <option value="64">MG4 64 kWh</option>
+        </select>
 
-<!-- Bottom Navigation -->
-<div class="bottom-nav">
-    <div class="nav-item">
-        <div class="nav-icon">📍</div>
-        หน้าแรก
+        <label>Current Battery (%)</label>
+        <input type="number" id="current" value="20">
+
+        <label>Target Battery (%)</label>
+        <div class="range-wrapper">
+            <input type="range" id="target" min="10" max="100" value="80">
+            <div class="range-value" id="rangeValue">Target: 80%</div>
+        </div>
+
+        <label>Charging Rate (Baht/kWh)</label>
+        <input type="number" id="rate" value="7.5">
+
+        <label>Charger Power (kW)</label>
+        <select id="charger">
+            <option value="7">AC 7 kW</option>
+            <option value="60">DC 60 kW</option>
+            <option value="120">DC 120 kW</option>
+        </select>
+
+        <div class="button" onclick="calculate()">
+            Calculate
+        </div>
+
+        <div class="result" id="result"></div>
+
     </div>
 
-    <div class="nav-item">
-        <div class="nav-icon">🕒</div>
-        ประวัติ
-    </div>
-
-    <div class="scan-btn">
-        ⛶
-    </div>
-
-    <div class="nav-item active">
-        <div class="nav-icon">👛</div>
-        วอลเล็ต
-    </div>
-
-    <div class="nav-item">
-        <div class="nav-icon">👤</div>
-        ผู้ใช้
-    </div>
 </div>
 
 <script>
-function openSheet(){
-    document.getElementById("sheet").classList.add("active");
+const topUpOptions=[100,200,300,500,1000,2000];
+
+document.getElementById("target").oninput=function(){
+    document.getElementById("rangeValue").innerText="Target: "+this.value+"%";
+};
+
+function smartTopUp(cost){
+    let remaining=Math.ceil(cost);
+    let combo=[];
+    const options=[...topUpOptions].sort((a,b)=>b-a);
+
+    for(let amount of options){
+        while(remaining>=amount){
+            combo.push(amount);
+            remaining-=amount;
+        }
+    }
+
+    if(remaining>0){
+        combo.push(options[options.length-1]);
+    }
+
+    const total=combo.reduce((a,b)=>a+b,0);
+    return {combo,total,leftover:total-cost};
 }
-function closeSheet(){
-    document.getElementById("sheet").classList.remove("active");
+
+function calculate(){
+    let battery=parseFloat(document.getElementById("carSelect").value);
+    let current=parseFloat(document.getElementById("current").value);
+    let target=parseFloat(document.getElementById("target").value);
+    let rate=parseFloat(document.getElementById("rate").value);
+    let charger=parseFloat(document.getElementById("charger").value);
+
+    if(target<=current){
+        document.getElementById("result").innerHTML="⚠ Target must be higher than current.";
+        return;
+    }
+
+    let efficiency=0.9;
+    let percent=(target-current)/100;
+    let energy=battery*percent;
+    let meterEnergy=energy/efficiency;
+    let cost=meterEnergy*rate;
+    let time=(meterEnergy/charger)*60;
+
+    let plan=smartTopUp(cost);
+
+    document.getElementById("result").innerHTML=
+        "🔋 Energy: "+meterEnergy.toFixed(2)+" kWh<br>"+
+        "⏱ Time: "+time.toFixed(0)+" minutes<br>"+
+        "💰 Estimated Cost: "+cost.toFixed(2)+" Baht<br>"+
+        "<div class='highlight'>Top-Up Plan: "+
+        plan.combo.join(" + ")+" = "+plan.total+" Baht</div>"+
+        "Remaining: "+plan.leftover.toFixed(2)+" Baht";
 }
 </script>
 
 </body>
 </html>
-
-
-
