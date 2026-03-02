@@ -1,0 +1,139 @@
+ยี่ห้อ,รุ่น (Model),ขนาดแบตเตอรี่ (kWh)
+ABARTH,500e,42.2 kWh
+,600e,54.0 kWh
+AIWAYS,U5,63.0 kWh
+,U6,63.0 kWh
+AUDI,Q4 e-tron,82.0 kWh
+,Q6 e-tron,100.0 kWh
+,Q8 e-tron,114.0 kWh
+,e-tron GT,93.4 kWh
+,RS e-tron GT,105.0 kWh
+BMW,iX1,66.5 kWh
+,iX2,66.5 kWh
+,iX3 (Gen 2),108.0 - 112.2 kWh
+,iX,76.6 - 111.5 kWh
+,i4,70.2 - 83.9 kWh
+,i5,81.2 kWh
+,i7,105.7 kWh
+BYD,Dolphin,44.9 - 60.5 kWh
+,Atto 3,50.0 - 60.5 kWh
+,Seal,61.4 - 82.5 kWh
+,Sealion 6 (PHEV),18.3 kWh
+,Sealion 7,82.5 - 91.3 kWh
+,Tang EV,108.8 kWh
+CHANGAN,Deepal L07,66.8 kWh
+,Deepal S07,66.8 kWh
+,Lumin,28.0 kWh
+CHERY,Omoda E5,61.0 kWh
+,Exeed Exlantix ES,77.0 - 97.7 kWh
+FIAT,500e,24.0 - 42.0 kWh
+,600e,54.0 kWh
+FOMM,One,11.8 kWh
+FORD,Mustang Mach-E,75.0 - 98.0 kWh
+,Explorer EV,58.0 - 82.0 kWh
+,F-150 Lightning,98.0 - 131.0 kWh
+FOTON,eAUMARK (Truck),81.0 - 100.0 kWh
+,eView / Traveller Sierra EV,50.7 - 77.3 kWh
+GAC AION,Aion Y Plus,50.6 - 63.2 kWh
+,Aion ES,53.7 kWh
+,Hyptec HT,80.0 - 93.0 kWh
+GEELY,Geometry C,70.0 kWh
+,Galaxy E8,62.0 - 76.0 kWh
+,EX5,68.4 kWh
+GWM,ORA Good Cat,47.8 - 57.7 kWh
+,ORA 07,83.5 kWh
+,Tank 500 (PHEV),37.1 kWh
+HIGER,H5C EV (Van),70.5 kWh
+,Azure (Bus),200.0 - 350.0 kWh
+HOMIDA,M1 (Mini Truck),15.0 - 20.0 kWh
+HONDA,e:N1,68.8 kWh
+,Honda e,35.5 kWh
+,Prologue,85.0 kWh
+HYUNDAI,IONIQ 5,58.0 - 84.0 kWh
+,IONIQ 6,77.4 kWh
+,Kona Electric,48.4 - 65.4 kWh
+ISUZU,D-Max EV,66.9 kWh
+,ELF EV,40.0 - 100.0 kWh
+JAC,iEV7S,42.8 kWh
+,T9 EV (Pickup),88.0 kWh
+JAGUAR,I-PACE,90.0 kWh
+JIAYUAN,Komi,10.0 - 15.0 kWh
+JR,รถจักรยานยนต์ไฟฟ้า,2.0 - 4.0 kWh
+KEYTON,M7 EV,41.8 kWh
+KIA,EV5,64.2 - 88.1 kWh
+,EV6,77.4 - 84.0 kWh
+,EV9,99.8 kWh
+KING LONG,รถบัสไฟฟ้า / รถตู้,50.0 - 300.0 kWh
+KYC,V5 EV (Truck),35.0 - 40.0 kWh
+LEAPMOTOR,T03,41.0 kWh
+,C10,69.9 kWh
+LEVC,TX (Taxi - PHEV),31.0 kWh
+,L380 (MPV),116.0 - 140.0 kWh
+LEXUS,UX 300e,72.8 kWh
+,RZ 450e,71.4 kWh
+LOTUS,Eletre,112.0 kWh
+,Emeya,102.0 kWh
+MASERATI,Grecale Folgore,105.0 kWh
+,GranTurismo Folgore,92.5 kWh
+MERCEDES-BENZ,EQA / EQB,66.5 kWh
+,EQE (Sedan/SUV),90.6 kWh
+,EQS (Sedan/SUV),108.4 kWh
+MG,MG4 Electric,51.0 - 77.0 kWh
+,MG ZS EV,50.3 kWh
+,MG ES,51.0 kWh
+,Cyberster,77.0 kWh
+,Maxus 7 / Maxus 9,90.0 - 106.0 kWh
+MINE,SPA 1,48.2 kWh
+MINI,Cooper SE,40.7 - 54.2 kWh
+,Countryman SE,66.5 kWh
+MITSUBISHI,Outlander PHEV,20.0 kWh
+,Minicab MiEV,16.0 kWh
+NEOMOR,D01,9.0 - 15.0 kWh
+NETA,Neta V-II,36.1 kWh
+,Neta X,51.8 - 62.0 kWh
+NEX,Point (Van),41.9 kWh
+,รถบัสไฟฟ้า (Streamer),100.0 - 422.0 kWh
+NEXTEM,Metro / Orca,10.0 - 26.0 kWh
+NISSAN,Leaf,40.0 - 62.0 kWh
+,Ariya,63.0 - 87.0 kWh
+PEUGEOT,e-2008,50.0 - 54.0 kWh
+,e-3008,73.0 - 98.0 kWh
+PORSCHE,Taycan,89.0 - 105.0 kWh
+,Macan EV,100.0 kWh
+RIDDARA,RD6,63.0 / 73.0 / 86.0 kWh
+ROLLS ROYCE,Spectre,102.0 kWh
+SERES,Seres 3,52.7 kWh
+,Seres 5,80.0 - 90.0 kWh
+SKYWELL,ET5,72.0 kWh
+SOKON,EC35,38.7 kWh
+STROM,Smart Saloon,20.0 - 30.0 kWh
+,Gorilla (Motorcycle),3.5 kWh
+TESLA,Model 3,57.5 - 79.0 kWh
+,Model Y,57.5 - 79.0 kWh
+,Model S / X,100.0 kWh
+,Cybertruck,123.0 kWh
+TOYOTA,bZ4X,71.4 kWh
+,Hilux Revo BEV,71.4 kWh (Est.)
+VINFAST,VF 5,37.2 kWh
+,VF 8,87.7 kWh
+,VF 9,123.0 kWh
+VOLKSWAGEN,ID.3,58.0 - 77.0 kWh
+,ID.4 / ID.5,82.0 kWh
+,ID.Buzz,82.0 - 91.0 kWh
+VOLT,City EV (For-Two),11.8 kWh
+,City EV (For-Four),16.5 kWh
+VOLVO,EX30,51.0 - 69.0 kWh
+,XC40 / C40 Recharge,78.0 kWh
+,EX90,111.0 kWh
+WULING,Air EV,17.3 - 26.7 kWh
+,Binguo EV,31.9 kWh
+,Cloud EV,50.6 kWh
+XEV,YOYO,10.4 kWh
+XIAOMI,SU7,73.6 - 101.0 kWh
+XPENG,G6,66.0 - 87.5 kWh
+,G9,78.2 - 98.0 kWh
+,P7i,86.2 kWh
+ZEEKR,Zeekr X,66.0 kWh
+,Zeekr 001,100.0 - 140.0 kWh
+,Zeekr 009,116.0 - 140.0 kWh
+OTHER,Lucid Air (Example),88.0 - 118.0 kWh
