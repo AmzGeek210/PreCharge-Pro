@@ -4,13 +4,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ProCharge</title>
 <style>
+:root{
+    --bg:#f8fafc;
+    --card:#ffffff;
+    --text:#0f172a;
+    --muted:#64748b;
+    --input-bg:#f1f5f9;
+    --accent:#7c3aed;
+    --accent-2:#22d3ee;
+    --border:#e2e8f0;
+    --shadow:0 8px 24px rgba(15,23,42,0.08);
+}
+body.dark{
+    --bg:#0f172a;
+    --card:#1e293b;
+    --text:#ffffff;
+    --muted:#94a3b8;
+    --input-bg:#0b1220;
+    --accent:#7c3aed;
+    --accent-2:#22d3ee;
+    --border:#334155;
+    --shadow:0 8px 24px rgba(0,0,0,0.35);
+}
 body{
     margin:0;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    background:linear-gradient(180deg,#0f172a,#1e293b);
-    color:white;
+    background:var(--bg);
+    color:var(--text);
     display:flex;
     justify-content:center;
+    transition:background .25s ease,color .25s ease;
 }
 .app{
     width:100%;
@@ -19,31 +42,56 @@ body{
     min-height:100vh;
     box-sizing:border-box;
 }
-.header{
-    margin-top:10px;
-    margin-bottom:25px;
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
 }
-.title{
+.logo-wrap{
+    text-align:center;
+    margin-top:8px;
+    margin-bottom:10px;
+}
+.logo{
+    width:110px;
+    max-width:40%;
+    height:auto;
+    display:block;
+    margin:0 auto 8px;
+}
+.brand{
     font-size:26px;
     font-weight:700;
 }
 .subtitle{
     font-size:14px;
-    color:#94a3b8;
-    margin-top:5px;
+    color:var(--muted);
+    margin-top:4px;
     line-height:1.5;
+    text-align:center;
+}
+.control-row{
+    display:flex;
+    gap:10px;
+}
+.control-row select,
+.control-row button{
+    margin:0;
 }
 .card{
-    background:#1e293b;
+    background:var(--card);
     padding:18px;
     border-radius:18px;
-    margin-bottom:18px;
-    box-shadow:0 8px 25px rgba(0,0,0,0.3);
+    margin-top:18px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
 }
 label{
     display:block;
     font-size:13px;
-    color:#cbd5e1;
+    color:var(--muted);
     margin-bottom:2px;
 }
 select,input{
@@ -52,9 +100,9 @@ select,input{
     margin-top:6px;
     margin-bottom:14px;
     border-radius:12px;
-    border:none;
-    background:#0f172a;
-    color:white;
+    border:1px solid var(--border);
+    background:var(--input-bg);
+    color:var(--text);
     box-sizing:border-box;
 }
 select{
@@ -67,14 +115,15 @@ select{
     font-size:14px;
     margin-top:-6px;
     margin-bottom:8px;
-    color:#38bdf8;
+    color:var(--accent-2);
 }
 .button{
-    background:#7c3aed;
+    background:var(--accent);
+    color:#fff;
     padding:14px;
     border-radius:14px;
     text-align:center;
-    font-weight:bold;
+    font-weight:700;
     cursor:pointer;
     margin-top:10px;
     user-select:none;
@@ -85,64 +134,90 @@ select{
 .result{
     margin-top:15px;
     font-size:14px;
-    line-height:1.7;
-    color:#e2e8f0;
+    line-height:1.75;
+    color:var(--text);
 }
 .highlight{
     margin-top:10px;
     font-size:18px;
-    font-weight:bold;
-    color:#22d3ee;
+    font-weight:700;
+    color:var(--accent-2);
 }
 .note{
     margin-top:10px;
     font-size:12px;
-    color:#94a3b8;
+    color:var(--muted);
     line-height:1.5;
 }
 .small{
-    color:#94a3b8;
+    color:var(--muted);
     font-size:13px;
+}
+.toggle-btn{
+    background:var(--card);
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px 14px;
+    cursor:pointer;
+    box-shadow:var(--shadow);
+    white-space:nowrap;
+}
+@media (max-width:420px){
+    .control-row{
+        flex-direction:column;
+    }
 }
 </style>
 </head>
 <body>
-
 <div class="app">
-    <div class="header">
-        <div class="title">ProCharge</div>
-        <div class="subtitle">
-            Estimate charging cost before you plug in.
+
+    <div class="logo-wrap">
+        <img class="logo" src="https://www.pea.co.th/sites/default/files/PEA-Logo.png" alt="PEA Logo">
+        <div class="brand">ProCharge</div>
+        <div class="subtitle" id="subtitleText">Estimate charging cost before you plug in.</div>
+    </div>
+
+    <div class="topbar">
+        <div class="control-row" style="width:100%;">
+            <select id="languageSelect">
+                <option value="th">ไทย</option>
+                <option value="en">English</option>
+                <option value="zh">中文</option>
+                <option value="ms">Melayu</option>
+            </select>
+            <button class="toggle-btn" id="themeToggle" type="button">Dark Mode</button>
         </div>
     </div>
 
     <div class="card">
-        <label for="brandSelect">Select Brand</label>
+        <label for="brandSelect" id="labelBrand">Select Brand</label>
         <select id="brandSelect">
             <option value="">-- Select Brand --</option>
         </select>
 
-        <label for="carSelect">Select Model</label>
+        <label for="carSelect" id="labelModel">Select Model</label>
         <select id="carSelect" disabled>
             <option value="" data-battery="">-- Select Model --</option>
         </select>
 
-        <label for="current">Current Battery (%)</label>
+        <label for="current" id="labelCurrent">Current Battery (%)</label>
         <input type="number" id="current" value="20" min="0" max="100">
 
-        <label for="target">Target Battery (%)</label>
+        <label for="target" id="labelTarget">Target Battery (%)</label>
         <div class="range-wrapper">
             <input type="range" id="target" min="10" max="100" value="80">
             <div class="range-value" id="rangeValue">Target: 80%</div>
         </div>
 
-        <label for="timeType">Time of Use</label>
+        <label for="timeType" id="labelTime">Time of Use</label>
         <select id="timeType">
             <option value="peak">Peak</option>
             <option value="offpeak">Off-Peak</option>
         </select>
 
-        <label for="charger">Charger Type</label>
+        <label for="charger" id="labelCharger">Charger Type</label>
         <select id="charger">
             <option value="CCS Combo II|25">CCS Combo II (25 kW)</option>
             <option value="CCS Combo II|50">CCS Combo II (50 kW)</option>
@@ -153,7 +228,7 @@ select{
             <option value="DC CHAdeMO|50">DC CHAdeMO (50 kW)</option>
         </select>
 
-        <div class="button" onclick="calculate()">Calculate</div>
+        <div class="button" onclick="calculate()" id="calculateBtn">Calculate</div>
         <div class="result" id="result"></div>
     </div>
 </div>
@@ -288,9 +363,170 @@ const carData = [
     {brand:"ZEEKR", model:"Zeekr 009", battery:116}
 ];
 
+const i18n = {
+    th: {
+        subtitle: "ประเมินค่าใช้จ่ายก่อนเริ่มชาร์จ",
+        brand: "เลือกยี่ห้อรถ",
+        model: "เลือกรุ่นรถ",
+        current: "แบตเตอรี่ปัจจุบัน (%)",
+        target: "แบตเตอรี่เป้าหมาย (%)",
+        targetText: "เป้าหมาย",
+        time: "ช่วงเวลาใช้งาน",
+        peak: "Peak",
+        offpeak: "Off-Peak",
+        charger: "ประเภทหัวชาร์จ",
+        calculate: "คำนวณ",
+        selectBrand: "-- เลือกยี่ห้อรถ --",
+        selectModel: "-- เลือกรุ่นรถ --",
+        pleaseBrand: "⚠ กรุณาเลือกยี่ห้อรถ",
+        pleaseModel: "⚠ กรุณาเลือกรุ่นรถ",
+        pleaseBattery: "⚠ กรุณากรอกเปอร์เซ็นต์แบตเตอรี่",
+        batteryRange: "⚠ เปอร์เซ็นต์แบตเตอรี่ต้องอยู่ระหว่าง 0 ถึง 100",
+        targetHigher: "⚠ เปอร์เซ็นต์เป้าหมายต้องมากกว่าปัจจุบัน",
+        vehicle: "รถที่เลือก",
+        chargerText: "หัวชาร์จ",
+        rate: "อัตราค่าไฟ",
+        energy: "🔋 พลังงานที่ต้องใช้",
+        timeNeeded: "⏱ เวลาที่คาดการณ์",
+        cost: "💰 ค่าใช้จ่ายโดยประมาณ",
+        topup: "แผนเติมเงิน",
+        remain: "ยอดเงินคงเหลือหลังชาร์จ",
+        note: "* เวลาและค่าใช้จ่ายจริงอาจเปลี่ยนแปลงตามสภาพแบตเตอรี่ charging curve และอุณหภูมิ",
+        minutes: "นาที"
+    },
+    en: {
+        subtitle: "Estimate charging cost before you plug in.",
+        brand: "Select Brand",
+        model: "Select Model",
+        current: "Current Battery (%)",
+        target: "Target Battery (%)",
+        targetText: "Target",
+        time: "Time of Use",
+        peak: "Peak",
+        offpeak: "Off-Peak",
+        charger: "Charger Type",
+        calculate: "Calculate",
+        selectBrand: "-- Select Brand --",
+        selectModel: "-- Select Model --",
+        pleaseBrand: "⚠ Please select a brand.",
+        pleaseModel: "⚠ Please select a model.",
+        pleaseBattery: "⚠ Please enter battery percentages.",
+        batteryRange: "⚠ Battery percentage must be between 0 and 100.",
+        targetHigher: "⚠ Target must be higher than current.",
+        vehicle: "Vehicle",
+        chargerText: "Charger",
+        rate: "TOU Rate",
+        energy: "🔋 Energy Needed",
+        timeNeeded: "⏱ Estimated Time",
+        cost: "💰 Estimated Cost",
+        topup: "Top-Up Plan",
+        remain: "Remaining Balance",
+        note: "* Estimated time and cost may vary depending on battery condition, charging curve, and temperature.",
+        minutes: "minutes"
+    },
+    zh: {
+        subtitle: "在充电前预估充电费用",
+        brand: "选择品牌",
+        model: "选择车型",
+        current: "当前电量 (%)",
+        target: "目标电量 (%)",
+        targetText: "目标",
+        time: "用电时段",
+        peak: "高峰时段",
+        offpeak: "低谷时段",
+        charger: "充电枪类型",
+        calculate: "计算",
+        selectBrand: "-- 选择品牌 --",
+        selectModel: "-- 选择车型 --",
+        pleaseBrand: "⚠ 请选择品牌",
+        pleaseModel: "⚠ 请选择车型",
+        pleaseBattery: "⚠ 请输入电量百分比",
+        batteryRange: "⚠ 电量百分比必须在 0 到 100 之间",
+        targetHigher: "⚠ 目标电量必须高于当前电量",
+        vehicle: "所选车辆",
+        chargerText: "充电器",
+        rate: "分时电价",
+        energy: "🔋 所需电量",
+        timeNeeded: "⏱ 预计时间",
+        cost: "💰 预计费用",
+        topup: "充值方案",
+        remain: "充电后剩余余额",
+        note: "* 实际时间和费用可能因电池状态、充电曲线和温度而变化。",
+        minutes: "分钟"
+    },
+    ms: {
+        subtitle: "Anggarkan kos pengecasan sebelum mula mengecas.",
+        brand: "Pilih Jenama",
+        model: "Pilih Model",
+        current: "Bateri Semasa (%)",
+        target: "Sasaran Bateri (%)",
+        targetText: "Sasaran",
+        time: "Masa Penggunaan",
+        peak: "Waktu Puncak",
+        offpeak: "Luar Puncak",
+        charger: "Jenis Pengecas",
+        calculate: "Kira",
+        selectBrand: "-- Pilih Jenama --",
+        selectModel: "-- Pilih Model --",
+        pleaseBrand: "⚠ Sila pilih jenama.",
+        pleaseModel: "⚠ Sila pilih model.",
+        pleaseBattery: "⚠ Sila masukkan peratus bateri.",
+        batteryRange: "⚠ Peratus bateri mesti antara 0 hingga 100.",
+        targetHigher: "⚠ Sasaran mesti lebih tinggi daripada semasa.",
+        vehicle: "Kenderaan",
+        chargerText: "Pengecas",
+        rate: "Kadar TOU",
+        energy: "🔋 Tenaga Diperlukan",
+        timeNeeded: "⏱ Anggaran Masa",
+        cost: "💰 Anggaran Kos",
+        topup: "Pelan Tambah Nilai",
+        remain: "Baki Selepas Caj",
+        note: "* Masa dan kos sebenar mungkin berubah bergantung pada keadaan bateri, keluk pengecasan dan suhu.",
+        minutes: "minit"
+    }
+};
+
+let currentLang = "th";
+
 document.getElementById("target").addEventListener("input", function(){
-    document.getElementById("rangeValue").innerText = "Target: " + this.value + "%";
+    document.getElementById("rangeValue").innerText = i18n[currentLang].targetText + ": " + this.value + "%";
 });
+
+document.getElementById("languageSelect").addEventListener("change", function(){
+    currentLang = this.value;
+    applyLanguage();
+});
+
+document.getElementById("themeToggle").addEventListener("click", function(){
+    document.body.classList.toggle("dark");
+    this.textContent = document.body.classList.contains("dark") ? "White Mode" : "Dark Mode";
+});
+
+function applyLanguage(){
+    const t = i18n[currentLang];
+    document.documentElement.lang = currentLang;
+    document.getElementById("subtitleText").innerText = t.subtitle;
+    document.getElementById("labelBrand").innerText = t.brand;
+    document.getElementById("labelModel").innerText = t.model;
+    document.getElementById("labelCurrent").innerText = t.current;
+    document.getElementById("labelTarget").innerText = t.target;
+    document.getElementById("labelTime").innerText = t.time;
+    document.getElementById("labelCharger").innerText = t.charger;
+    document.getElementById("calculateBtn").innerText = t.calculate;
+    document.getElementById("rangeValue").innerText = t.targetText + ": " + document.getElementById("target").value + "%";
+
+    const brandSelect = document.getElementById("brandSelect");
+    brandSelect.options[0].text = t.selectBrand;
+
+    const carSelect = document.getElementById("carSelect");
+    if (carSelect.options.length > 0) {
+        carSelect.options[0].text = t.selectModel;
+    }
+
+    const timeType = document.getElementById("timeType");
+    timeType.options[0].text = t.peak;
+    timeType.options[1].text = t.offpeak;
+}
 
 function populateBrands() {
     const brandSelect = document.getElementById("brandSelect");
@@ -306,7 +542,7 @@ function populateBrands() {
 
 function populateModels(selectedBrand) {
     const carSelect = document.getElementById("carSelect");
-    carSelect.innerHTML = '<option value="" data-battery="">-- Select Model --</option>';
+    carSelect.innerHTML = `<option value="" data-battery="">${i18n[currentLang].selectModel}</option>`;
 
     if (!selectedBrand) {
         carSelect.disabled = true;
@@ -351,20 +587,26 @@ function smartTopUp(cost){
     let bestTotal = null;
     let bestCombo = [];
 
+    const sortedOptions = [...topUpOptions].sort((a, b) => b - a);
+
     function search(sum, combo, startIndex){
         if (sum >= targetCost){
-            if (bestTotal === null || sum < bestTotal){
+            const isBetterTotal = bestTotal === null || sum < bestTotal;
+            const isSameTotalButFewer = sum === bestTotal && combo.length < bestCombo.length;
+
+            if (isBetterTotal || isSameTotalButFewer){
                 bestTotal = sum;
                 bestCombo = [...combo];
             }
             return;
         }
 
-        if (bestTotal !== null && sum >= bestTotal) return;
+        if (bestTotal !== null && sum > bestTotal) return;
+        if (bestTotal !== null && sum === bestTotal && combo.length >= bestCombo.length) return;
 
-        for (let i = startIndex; i < topUpOptions.length; i++){
-            combo.push(topUpOptions[i]);
-            search(sum + topUpOptions[i], combo, i);
+        for (let i = startIndex; i < sortedOptions.length; i++){
+            combo.push(sortedOptions[i]);
+            search(sum + sortedOptions[i], combo, i);
             combo.pop();
         }
     }
@@ -379,16 +621,18 @@ function smartTopUp(cost){
 }
 
 function formatTime(totalMinutes){
+    const t = i18n[currentLang];
     const hours = Math.floor(totalMinutes / 60);
     const minutes = Math.round(totalMinutes % 60);
 
     if (hours <= 0){
-        return minutes + " minutes";
+        return minutes + " " + t.minutes;
     }
     return hours + "h " + minutes + "m";
 }
 
 function calculate(){
+    const t = i18n[currentLang];
     const brand = document.getElementById("brandSelect").value;
     const carSelect = document.getElementById("carSelect");
     const selectedOption = carSelect.options[carSelect.selectedIndex];
@@ -405,27 +649,27 @@ function calculate(){
     const chargerPower = parseFloat(chargerPowerText);
 
     if (!brand){
-        document.getElementById("result").innerHTML = "⚠ Please select a brand.";
+        document.getElementById("result").innerHTML = t.pleaseBrand;
         return;
     }
 
     if (!battery){
-        document.getElementById("result").innerHTML = "⚠ Please select a model.";
+        document.getElementById("result").innerHTML = t.pleaseModel;
         return;
     }
 
     if (isNaN(current) || isNaN(target)){
-        document.getElementById("result").innerHTML = "⚠ Please enter battery percentages.";
+        document.getElementById("result").innerHTML = t.pleaseBattery;
         return;
     }
 
     if (current < 0 || current > 100 || target < 0 || target > 100){
-        document.getElementById("result").innerHTML = "⚠ Battery percentage must be between 0 and 100.";
+        document.getElementById("result").innerHTML = t.batteryRange;
         return;
     }
 
     if (target <= current){
-        document.getElementById("result").innerHTML = "⚠ Target must be higher than current.";
+        document.getElementById("result").innerHTML = t.targetHigher;
         return;
     }
 
@@ -439,18 +683,19 @@ function calculate(){
     const plan = smartTopUp(cost);
 
     document.getElementById("result").innerHTML =
-        "<div class='small'>Vehicle: " + vehicleLabel + "</div>" +
-        "<div class='small'>Charger: " + chargerName + " (" + chargerPower + " kW)</div>" +
-        "<div class='small'>TOU Rate: " + rate.toFixed(1) + " Baht/kWh (" + (timeType === "peak" ? "Peak" : "Off-Peak") + ")</div><br>" +
-        "🔋 Energy Needed: " + meterEnergy.toFixed(2) + " kWh<br>" +
-        "⏱ Estimated Time: " + formatTime(timeMinutes) + "<br>" +
-        "💰 Estimated Cost: " + cost.toFixed(2) + " Baht<br>" +
-        "<div class='highlight'>Top-Up Plan: " + plan.combo.join(" + ") + " = " + plan.total + " Baht</div>" +
-        "Remaining Balance: " + plan.leftover.toFixed(2) + " Baht" +
-        "<div class='note'>* Estimated time and cost may vary depending on battery condition, charging curve, and temperature.</div>";
+        `<div class="small">${t.vehicle}: ${vehicleLabel}</div>` +
+        `<div class="small">${t.chargerText}: ${chargerName} (${chargerPower} kW)</div>` +
+        `<div class="small">${t.rate}: ${rate.toFixed(1)} Baht/kWh (${timeType === "peak" ? t.peak : t.offpeak})</div><br>` +
+        `${t.energy}: ${meterEnergy.toFixed(2)} kWh<br>` +
+        `${t.timeNeeded}: ${formatTime(timeMinutes)}<br>` +
+        `${t.cost}: ${cost.toFixed(2)} Baht<br>` +
+        `<div class="highlight">${t.topup}: ${plan.combo.join(" + ")} = ${plan.total} Baht</div>` +
+        `${t.remain}: ${plan.leftover.toFixed(2)} Baht` +
+        `<div class="note">${t.note}</div>`;
 }
 
 populateBrands();
+applyLanguage();
 </script>
 
 </body>
