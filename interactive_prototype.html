@@ -94,7 +94,8 @@ label{
     color:var(--muted);
     margin-bottom:2px;
 }
-select,input{
+select,
+input[type="number"]{
     width:100%;
     padding:12px;
     margin-top:6px;
@@ -113,9 +114,114 @@ select{
 }
 .range-value{
     font-size:14px;
-    margin-top:-6px;
+    margin-top:0;
     margin-bottom:8px;
     color:var(--accent-2);
+    font-weight:600;
+}
+.slider-control{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:8px;
+    margin-bottom:8px;
+}
+.slider-control input[type="range"]{
+    flex:1;
+}
+input[type="range"]{
+    width:100%;
+    height:8px;
+    padding:0;
+    margin:0;
+    border:none;
+    border-radius:999px;
+    background:linear-gradient(90deg, var(--accent) 0%, var(--accent) 80%, var(--border) 80%, var(--border) 100%);
+    box-sizing:border-box;
+    -webkit-appearance:none;
+    appearance:none;
+    cursor:pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track{
+    height:8px;
+    border-radius:999px;
+    background:transparent;
+}
+input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    appearance:none;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:var(--accent);
+    border:3px solid #ffffff;
+    margin-top:-7px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.25);
+}
+input[type="range"]::-moz-range-track{
+    height:8px;
+    border-radius:999px;
+    background:transparent;
+}
+input[type="range"]::-moz-range-thumb{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:var(--accent);
+    border:3px solid #ffffff;
+    box-shadow:0 2px 8px rgba(0,0,0,0.25);
+}
+.step-btn{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--input-bg);
+    color:var(--text);
+    font-size:20px;
+    font-weight:700;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+}
+.step-btn:active{
+    transform:scale(0.96);
+}
+.tou-box{
+    background:var(--input-bg);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:12px;
+    margin-top:6px;
+    margin-bottom:14px;
+}
+.tou-status{
+    font-weight:700;
+    font-size:15px;
+    color:var(--accent);
+}
+.tou-detail{
+    margin-top:4px;
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.5;
+}
+
+.charger-auto-note{
+    background:var(--input-bg);
+    border:1px dashed var(--border);
+    border-radius:12px;
+    padding:10px 12px;
+    margin-top:-4px;
+    margin-bottom:14px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.5;
+}
+.charger-auto-note strong{
+    color:var(--accent);
 }
 .button{
     background:var(--accent);
@@ -203,19 +309,31 @@ select{
         </select>
 
         <label for="current" id="labelCurrent">Current Battery (%)</label>
-        <input type="number" id="current" value="20" min="0" max="100">
+        <div class="range-wrapper">
+            <div class="slider-control">
+                <button class="step-btn" type="button" onclick="adjustSlider('current', -1)">−</button>
+                <input type="range" id="current" min="0" max="100" value="20">
+                <button class="step-btn" type="button" onclick="adjustSlider('current', 1)">+</button>
+            </div>
+            <div class="range-value" id="currentValue">Current: 20%</div>
+        </div>
 
         <label for="target" id="labelTarget">Target Battery (%)</label>
         <div class="range-wrapper">
-            <input type="range" id="target" min="10" max="100" value="80">
+            <div class="slider-control">
+                <button class="step-btn" type="button" onclick="adjustSlider('target', -1)">−</button>
+                <input type="range" id="target" min="0" max="100" value="80">
+                <button class="step-btn" type="button" onclick="adjustSlider('target', 1)">+</button>
+            </div>
             <div class="range-value" id="rangeValue">Target: 80%</div>
         </div>
 
-        <label for="timeType" id="labelTime">Time of Use</label>
-        <select id="timeType">
-            <option value="peak">Peak</option>
-            <option value="offpeak">Off-Peak</option>
-        </select>
+        <label id="labelTime">Time of Use</label>
+        <div class="tou-box">
+            <div class="tou-status" id="touStatus">Checking TOU period...</div>
+            <div class="tou-detail" id="touDetail"></div>
+        </div>
+        <input type="hidden" id="timeType" value="offpeak">
 
         <label for="charger" id="labelCharger">Charger Type</label>
         <select id="charger">
@@ -227,6 +345,7 @@ select{
             <option value="AC Type 2|43">AC Type 2 (43 kW)</option>
             <option value="DC CHAdeMO|50">DC CHAdeMO (50 kW)</option>
         </select>
+        <div class="charger-auto-note" id="chargerAutoNote"></div>
 
         <div class="button" onclick="calculate()" id="calculateBtn">Calculate</div>
         <div class="result" id="result"></div>
@@ -371,10 +490,22 @@ const i18n = {
         current: "แบตเตอรี่ปัจจุบัน (%)",
         target: "แบตเตอรี่เป้าหมาย (%)",
         targetText: "เป้าหมาย",
+        currentText: "ปัจจุบัน",
         time: "ช่วงเวลาใช้งาน",
         peak: "Peak",
         offpeak: "Off-Peak",
+        touChecking: "กำลังตรวจสอบช่วงเวลา...",
+        touPeakNow: "ขณะนี้อยู่ในช่วง Peak",
+        touOffPeakNow: "ขณะนี้อยู่ในช่วง Off-Peak",
+        touWeekdayPeak: "วันจันทร์-ศุกร์ เวลา 09.00-22.00 น.",
+        touWeekdayOffPeak: "วันจันทร์-ศุกร์ เวลา 22.00-09.00 น.",
+        touWeekend: "วันเสาร์-อาทิตย์ เป็น Off-Peak ทั้งวัน",
+        touHoliday: "วันหยุดราชการ/วันแรงงานแห่งชาติ เป็น Off-Peak ทั้งวัน",
         charger: "ประเภทหัวชาร์จ",
+        chargerDetected: "ตรวจพบหัวชาร์จจาก QR Code",
+        chargerManual: "ไม่พบข้อมูลหัวชาร์จจาก QR Code กรุณาเลือกหัวชาร์จ",
+        station: "สถานี",
+        lockedByQR: "ระบบล็อกหัวชาร์จอัตโนมัติตามจุดที่สแกน",
         calculate: "คำนวณ",
         selectBrand: "-- เลือกยี่ห้อรถ --",
         selectModel: "-- เลือกรุ่นรถ --",
@@ -391,7 +522,7 @@ const i18n = {
         cost: "💰 ค่าใช้จ่ายโดยประมาณ",
         topup: "แผนเติมเงิน",
         remain: "ยอดเงินคงเหลือหลังชาร์จ",
-        note: "* เวลาและค่าใช้จ่ายจริงอาจเปลี่ยนแปลงตามสภาพแบตเตอรี่ charging curve และอุณหภูมิ",
+        note: "* ค่าใช้จ่ายจริงอาจเปลี่ยนแปลงตามสภาพแบตเตอรี่ charging curve และประสิทธิภาพการชาร์จ",
         minutes: "นาที"
     },
     en: {
@@ -401,10 +532,22 @@ const i18n = {
         current: "Current Battery (%)",
         target: "Target Battery (%)",
         targetText: "Target",
+        currentText: "Current",
         time: "Time of Use",
         peak: "Peak",
         offpeak: "Off-Peak",
+        touChecking: "Checking TOU period...",
+        touPeakNow: "Current period: Peak",
+        touOffPeakNow: "Current period: Off-Peak",
+        touWeekdayPeak: "Monday-Friday, 09:00-22:00",
+        touWeekdayOffPeak: "Monday-Friday, 22:00-09:00",
+        touWeekend: "Saturday-Sunday is Off-Peak all day",
+        touHoliday: "Public holiday / National Labour Day is Off-Peak all day",
         charger: "Charger Type",
+        chargerDetected: "Charger detected from QR Code",
+        chargerManual: "No charger data found from QR Code. Please select charger type.",
+        station: "Station",
+        lockedByQR: "Charger type is locked automatically based on scanned point.",
         calculate: "Calculate",
         selectBrand: "-- Select Brand --",
         selectModel: "-- Select Model --",
@@ -421,7 +564,7 @@ const i18n = {
         cost: "💰 Estimated Cost",
         topup: "Top-Up Plan",
         remain: "Remaining Balance",
-        note: "* Estimated time and cost may vary depending on battery condition, charging curve, and temperature.",
+        note: "* Actual cost may vary depending on battery condition, charging curve, and charging efficiency.",
         minutes: "minutes"
     },
     zh: {
@@ -431,10 +574,22 @@ const i18n = {
         current: "当前电量 (%)",
         target: "目标电量 (%)",
         targetText: "目标",
+        currentText: "当前",
         time: "用电时段",
         peak: "高峰时段",
         offpeak: "低谷时段",
+        touChecking: "正在检测分时电价...",
+        touPeakNow: "当前时段：高峰",
+        touOffPeakNow: "当前时段：低谷",
+        touWeekdayPeak: "周一至周五 09:00-22:00",
+        touWeekdayOffPeak: "周一至周五 22:00-09:00",
+        touWeekend: "周六、周日全天为低谷时段",
+        touHoliday: "公共假日/劳动节全天为低谷时段",
         charger: "充电枪类型",
+        chargerDetected: "已通过 QR Code 检测到充电枪",
+        chargerManual: "未从 QR Code 找到充电枪信息，请选择充电枪类型",
+        station: "站点",
+        lockedByQR: "系统已根据扫码位置自动锁定充电枪类型",
         calculate: "计算",
         selectBrand: "-- 选择品牌 --",
         selectModel: "-- 选择车型 --",
@@ -451,7 +606,7 @@ const i18n = {
         cost: "💰 预计费用",
         topup: "充值方案",
         remain: "充电后剩余余额",
-        note: "* 实际时间和费用可能因电池状态、充电曲线和温度而变化。",
+        note: "* 实际费用可能因电池状态、充电曲线和充电效率而变化。",
         minutes: "分钟"
     },
     ms: {
@@ -461,10 +616,22 @@ const i18n = {
         current: "Bateri Semasa (%)",
         target: "Sasaran Bateri (%)",
         targetText: "Sasaran",
+        currentText: "Semasa",
         time: "Masa Penggunaan",
         peak: "Waktu Puncak",
         offpeak: "Luar Puncak",
+        touChecking: "Sedang menyemak tempoh TOU...",
+        touPeakNow: "Tempoh semasa: Waktu Puncak",
+        touOffPeakNow: "Tempoh semasa: Luar Puncak",
+        touWeekdayPeak: "Isnin-Jumaat, 09:00-22:00",
+        touWeekdayOffPeak: "Isnin-Jumaat, 22:00-09:00",
+        touWeekend: "Sabtu-Ahad ialah Luar Puncak sepanjang hari",
+        touHoliday: "Cuti umum / Hari Pekerja ialah Luar Puncak sepanjang hari",
         charger: "Jenis Pengecas",
+        chargerDetected: "Pengecas dikesan daripada QR Code",
+        chargerManual: "Data pengecas tidak ditemui daripada QR Code. Sila pilih jenis pengecas.",
+        station: "Stesen",
+        lockedByQR: "Jenis pengecas dikunci secara automatik berdasarkan lokasi imbasan.",
         calculate: "Kira",
         selectBrand: "-- Pilih Jenama --",
         selectModel: "-- Pilih Model --",
@@ -481,16 +648,45 @@ const i18n = {
         cost: "💰 Anggaran Kos",
         topup: "Pelan Tambah Nilai",
         remain: "Baki Selepas Caj",
-        note: "* Masa dan kos sebenar mungkin berubah bergantung pada keadaan bateri, keluk pengecasan dan suhu.",
+        note: "* Kos sebenar mungkin berubah bergantung pada keadaan bateri, keluk pengecasan dan kecekapan pengecasan.",
         minutes: "minit"
     }
 };
 
 let currentLang = "th";
 
-document.getElementById("target").addEventListener("input", function(){
-    document.getElementById("rangeValue").innerText = i18n[currentLang].targetText + ": " + this.value + "%";
-});
+document.getElementById("current").addEventListener("input", updateSliderLabels);
+document.getElementById("target").addEventListener("input", updateSliderLabels);
+
+function setRangeFill(slider){
+    const min = parseInt(slider.min, 10);
+    const max = parseInt(slider.max, 10);
+    const value = parseInt(slider.value, 10);
+    const percent = ((value - min) / (max - min)) * 100;
+    slider.style.background = `linear-gradient(90deg, var(--accent) 0%, var(--accent) ${percent}%, var(--border) ${percent}%, var(--border) 100%)`;
+}
+
+function updateSliderLabels(){
+    const t = i18n[currentLang];
+    const currentSlider = document.getElementById("current");
+    const targetSlider = document.getElementById("target");
+
+    document.getElementById("currentValue").innerText = t.currentText + ": " + currentSlider.value + "%";
+    document.getElementById("rangeValue").innerText = t.targetText + ": " + targetSlider.value + "%";
+
+    setRangeFill(currentSlider);
+    setRangeFill(targetSlider);
+}
+
+function adjustSlider(id, step){
+    const slider = document.getElementById(id);
+    const value = parseInt(slider.value, 10);
+    const min = parseInt(slider.min, 10);
+    const max = parseInt(slider.max, 10);
+
+    slider.value = Math.min(max, Math.max(min, value + step));
+    updateSliderLabels();
+}
 
 document.getElementById("languageSelect").addEventListener("change", function(){
     currentLang = this.value;
@@ -513,7 +709,9 @@ function applyLanguage(){
     document.getElementById("labelTime").innerText = t.time;
     document.getElementById("labelCharger").innerText = t.charger;
     document.getElementById("calculateBtn").innerText = t.calculate;
-    document.getElementById("rangeValue").innerText = t.targetText + ": " + document.getElementById("target").value + "%";
+    updateSliderLabels();
+    updateTOUAuto();
+    applyChargerFromQR();
 
     const brandSelect = document.getElementById("brandSelect");
     brandSelect.options[0].text = t.selectBrand;
@@ -523,9 +721,6 @@ function applyLanguage(){
         carSelect.options[0].text = t.selectModel;
     }
 
-    const timeType = document.getElementById("timeType");
-    timeType.options[0].text = t.peak;
-    timeType.options[1].text = t.offpeak;
 }
 
 function populateBrands() {
@@ -569,6 +764,134 @@ document.getElementById("brandSelect").addEventListener("change", function(){
     populateModels(this.value);
     document.getElementById("result").innerHTML = "";
 });
+
+
+// วันหยุดราชการแบบวันที่คงที่ + วันแรงงานแห่งชาติ
+// ไม่รวมวันหยุดชดเชย และไม่รวมวันพืชมงคล ตามเงื่อนไขที่กำหนด
+const FIXED_THAI_HOLIDAYS = [
+    "01-01", // วันขึ้นปีใหม่
+    "04-06", // วันจักรี
+    "04-13", // สงกรานต์
+    "04-14", // สงกรานต์
+    "04-15", // สงกรานต์
+    "05-01", // วันแรงงานแห่งชาติ
+    "05-04", // วันฉัตรมงคล
+    "06-03", // วันเฉลิมพระชนมพรรษา สมเด็จพระราชินี
+    "07-28", // วันเฉลิมพระชนมพรรษา ร.10
+    "08-12", // วันแม่แห่งชาติ
+    "10-13", // วันนวมินทรมหาราช
+    "10-23", // วันปิยมหาราช
+    "12-05", // วันพ่อแห่งชาติ
+    "12-10", // วันรัฐธรรมนูญ
+    "12-31"  // วันสิ้นปี
+];
+
+// วันหยุดราชการที่วันเปลี่ยนทุกปี เช่น มาฆบูชา วิสาขบูชา อาสาฬหบูชา เข้าพรรษา
+// ใส่เฉพาะ "วันหยุดจริง" ไม่ใส่วันหยุดชดเชย และไม่ใส่วันพืชมงคล
+const EXTRA_THAI_HOLIDAYS = [
+    // ตัวอย่าง: "2026-03-03"
+];
+
+function getBangkokDateParts(date = new Date()){
+    const formatter = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Bangkok",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23"
+    });
+
+    const parts = formatter.formatToParts(date).reduce((acc, part) => {
+        acc[part.type] = part.value;
+        return acc;
+    }, {});
+
+    const year = Number(parts.year);
+    const month = Number(parts.month);
+    const day = Number(parts.day);
+    const hour = Number(parts.hour);
+    const minute = Number(parts.minute);
+
+    const dateKey = `${year}-${String(month).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+    const monthDayKey = `${String(month).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+    const dayOfWeek = new Date(Date.UTC(year, month - 1, day)).getUTCDay(); // 0=Sun, 6=Sat
+
+    return { year, month, day, hour, minute, dateKey, monthDayKey, dayOfWeek };
+}
+
+function isThaiHoliday(parts){
+    return FIXED_THAI_HOLIDAYS.includes(parts.monthDayKey) ||
+           EXTRA_THAI_HOLIDAYS.includes(parts.dateKey);
+}
+
+function getCurrentTOU(){
+    const parts = getBangkokDateParts();
+    const isWeekend = parts.dayOfWeek === 0 || parts.dayOfWeek === 6;
+    const isHoliday = isThaiHoliday(parts);
+
+    if (isWeekend){
+        return { type: "offpeak", reasonKey: "touWeekend" };
+    }
+
+    if (isHoliday){
+        return { type: "offpeak", reasonKey: "touHoliday" };
+    }
+
+    const isPeakTime = parts.hour >= 9 && parts.hour < 22;
+
+    if (isPeakTime){
+        return { type: "peak", reasonKey: "touWeekdayPeak" };
+    }
+
+    return { type: "offpeak", reasonKey: "touWeekdayOffPeak" };
+}
+
+function updateTOUAuto(){
+    const t = i18n[currentLang];
+    const tou = getCurrentTOU();
+
+    document.getElementById("timeType").value = tou.type;
+    document.getElementById("touStatus").innerText = tou.type === "peak" ? t.touPeakNow : t.touOffPeakNow;
+    document.getElementById("touDetail").innerText = t[tou.reasonKey];
+}
+
+const chargerMap = {
+    ac43: "AC Type 2|43",
+    chademo50: "DC CHAdeMO|50",
+    ccs25: "CCS Combo II|25",
+    ccs50: "CCS Combo II|50",
+    ccs120: "CCS Combo II|120",
+    ccs300: "CCS Combo II|300",
+    ccs360: "CCS Combo II|360"
+};
+
+function applyChargerFromQR(){
+    const t = i18n[currentLang];
+    const params = new URLSearchParams(window.location.search);
+    const chargerCode = (params.get("charger") || "").toLowerCase().trim();
+    const stationCode = (params.get("station") || "").trim();
+
+    const chargerSelect = document.getElementById("charger");
+    const note = document.getElementById("chargerAutoNote");
+
+    if (chargerMap[chargerCode]){
+        chargerSelect.value = chargerMap[chargerCode];
+        chargerSelect.disabled = true;
+
+        const [chargerName, chargerPower] = chargerMap[chargerCode].split("|");
+
+        note.innerHTML =
+            "<strong>" + t.chargerDetected + ":</strong> " +
+            chargerName + " (" + chargerPower + " kW)" +
+            (stationCode ? "<br><strong>" + t.station + ":</strong> " + stationCode : "") +
+            "<br>" + t.lockedByQR;
+    } else {
+        chargerSelect.disabled = false;
+        note.innerHTML = t.chargerManual;
+    }
+}
 
 function getRateByPower(power, timeType){
     if (power < 50){
@@ -620,17 +943,6 @@ function smartTopUp(cost){
     };
 }
 
-function formatTime(totalMinutes){
-    const t = i18n[currentLang];
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = Math.round(totalMinutes % 60);
-
-    if (hours <= 0){
-        return minutes + " " + t.minutes;
-    }
-    return hours + "h " + minutes + "m";
-}
-
 function calculate(){
     const t = i18n[currentLang];
     const brand = document.getElementById("brandSelect").value;
@@ -679,7 +991,6 @@ function calculate(){
     const meterEnergy = energyToBattery / efficiency;
     const rate = getRateByPower(chargerPower, timeType);
     const cost = meterEnergy * rate;
-    const timeMinutes = (meterEnergy / chargerPower) * 60;
     const plan = smartTopUp(cost);
 
     document.getElementById("result").innerHTML =
@@ -687,7 +998,6 @@ function calculate(){
         `<div class="small">${t.chargerText}: ${chargerName} (${chargerPower} kW)</div>` +
         `<div class="small">${t.rate}: ${rate.toFixed(1)} Baht/kWh (${timeType === "peak" ? t.peak : t.offpeak})</div><br>` +
         `${t.energy}: ${meterEnergy.toFixed(2)} kWh<br>` +
-        `${t.timeNeeded}: ${formatTime(timeMinutes)}<br>` +
         `${t.cost}: ${cost.toFixed(2)} Baht<br>` +
         `<div class="highlight">${t.topup}: ${plan.combo.join(" + ")} = ${plan.total} Baht</div>` +
         `${t.remain}: ${plan.leftover.toFixed(2)} Baht` +
@@ -696,6 +1006,9 @@ function calculate(){
 
 populateBrands();
 applyLanguage();
+updateTOUAuto();
+applyChargerFromQR();
+setInterval(updateTOUAuto, 60000);
 </script>
 
 </body>
